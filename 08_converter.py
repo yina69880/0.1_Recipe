@@ -1,13 +1,21 @@
-# ask user for amount
-# ask user for unit
+ #ask user for amount
+ # ask user for unit
 # check that unit is in dictionary
 
-# if unit in dictionary, convert to mL
+# if unit is in dictionary, convert to mL
 
-# if no unit given / unit is unknown, leave as is.
+# if no unit / unit is unknown
 
 
-# Function goes here
+# ***** Functions go here *****
+def general_converter(how_much, lookup, dictionary, conversion_factor):
+
+    if lookup in dictionary:
+        mult_by = dictionary.get(unit)
+        how_much = how_much * mult_by * conversion_factor
+
+    return how_much
+
 def unit_checker():
 
     unit_tocheck = input("Unit? ")
@@ -16,12 +24,10 @@ def unit_checker():
     teaspoon = {"tsp", "teaspoon", "t"}
     tablespoon = {"tbs", "tablespoon", "T", "tbsp"}
     cup = {"cup", "C", "c"}
-    ounce = { "O", "oz", "ounce"}
+    ounce = {"O", "oz", "ounce"}
     pint = {"p", "pt"}
     quart = {"q", "qt"}
     pound = {"lb", "pound", "#"}
-
-
 
     if unit_tocheck == "":
         print("you chose {}".format(unit_checker))
@@ -42,7 +48,6 @@ def unit_checker():
     elif unit_tocheck.lower() in pound:
         return "lb"
 
-# Main routine goes here
 unit_central = {
     "tsp": 5,
     "tbs": 15,
@@ -50,22 +55,20 @@ unit_central = {
     "ounce": 28.35,
     "pint": 473,
     "quart": 946,
-    "pound" : 454
+    "pound": 454
 }
-
 
 keep_going = ""
 while keep_going == "":
     amount = eval(input("How much? "))
     amount = float(amount)
+
     # get unit and change it to match dictionary
     unit = unit_checker()
 
-    if unit in unit_central:
-        mult_by = unit_central.get(unit)
-        amount = amount * mult_by
-        print("Amount in mL {}".format(amount))
-    else:
-        print("{} is unchanged".format(amount))
+    amount = general_converter(amount, unit, unit_central, 1)
+    print(amount)
 
-    keep_going = input("<enters> or q ")
+
+
+ # keep_going = input("<enters> or q ")
