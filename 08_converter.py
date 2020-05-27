@@ -13,7 +13,7 @@ def general_converter(how_much, lookup, dictionary, conversion_factor):
     if lookup in dictionary:
         mult_by = dictionary.get(unit)
         how_much = how_much * mult_by * conversion_factor
-
+        print("Amount in milliliters: {}".format(how_much))
     return how_much
 
 def unit_checker():
@@ -24,10 +24,12 @@ def unit_checker():
     teaspoon = {"tsp", "teaspoon", "t"}
     tablespoon = {"tbs", "tablespoon", "T", "tbsp"}
     cup = {"cup", "C", "c"}
-    ounce = {"O", "oz", "ounce"}
+    ounce = {"o", "oz", "ounce"}
     pint = {"p", "pt"}
     quart = {"q", "qt"}
     pound = {"lb", "pound", "#"}
+    milliliter = ["millilitre", "ml", "cc", "mL"]
+    liter = ["l", "litre", "L"]
 
     if unit_tocheck == "":
         print("you chose {}".format(unit_checker))
@@ -47,6 +49,12 @@ def unit_checker():
         return "qt"
     elif unit_tocheck.lower() in pound:
         return "lb"
+    elif unit_tocheck.lower() in milliliter:
+        return "milliliter"
+
+    elif unit_tocheck.lower() in liter:
+        return "liter"
+
 
 unit_central = {
     "tsp": 5,
@@ -55,7 +63,9 @@ unit_central = {
     "ounce": 28.35,
     "pint": 473,
     "quart": 946,
-    "pound": 454
+    "pound": 454,
+    "liter": 1000,
+    "milliliter": 1,
 }
 
 keep_going = ""
