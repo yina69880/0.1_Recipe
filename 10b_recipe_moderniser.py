@@ -37,20 +37,46 @@ def num_check(question):
 
     valid = False
     while not valid:
+        response = input(question)
+
+        if response == "":
+            print(error)
+            continue
         try:
-            response = float(input(question))
+            response = eval(response)
+            response = float (response)
 
             if response <= 0:
                 print(error)
             else:
-
                 return response
 
         except ValueError:
             print(error)
 
+        except SyntaxError:
+            print(error)
+
+        except NameError:
+            print(error)
+
+def yes_no_check(question):
+    error = "Please enter 'yes' or 'no'"
+
+    valid = False
+    while not valid:
+        response = input(question).lower()
+
+        if response == "y" or response == "yes":
+            return ("yes")
+        elif response == "n" or response == "no":
+            return ("no")
+        else:
+            print(error)
+
 
 def get_sf():
+
     serving_size = num_check("What is the recipe serving size? ")
 
     sf = 1
@@ -81,8 +107,10 @@ def get_all_ingredients():
     all_ingredients = []
 
     stop = ""
+
     print("Please enter ingredients one line at a time. Press 'xxx' to when "
           "you are done.")
+    print()
     while stop != "xxx":
         # Ask user for ingredient (via not blank function)
         get_ingredient = not_blank("Recipe Line: ",
@@ -156,6 +184,21 @@ def unit_checker(raw_unit):
         return "litre"
     elif unit_tocheck.lower() in pound:
         return "pound"
+    else:
+        return unit_tocheck
+
+def round_nicely(to_round):
+
+    if to_round % 1 ==0:
+        to_round = int(to_round)
+    elif to_round * 10 % 1 == 0:
+        to_round = "{:.1f}".format(to_round)
+    else:
+        to_round = "{:.2f}".format(to_round)
+
+    return to_round
+
+
 
 # ***** Main Routine ******
 
@@ -169,7 +212,8 @@ unit_central = {
     "quart": 946,
     "pound": 454,
     "litre": 1000,
-    "ml": 1
+    "ml": 1,
+    "g": 1
 }
 
 # *** Generate food dictionary *****
@@ -193,6 +237,7 @@ for row in csv_groceries:
 # set up list to hold 'modernised' ingredients
 modernised_recipe = []
 
+
 # Ask user for recipe name and check its not blank
 recipe_name = not_blank("What is the recipe name? ",
                    "The recipe name can't be blank and can't contain numbers,",
@@ -202,9 +247,11 @@ source = not_blank("Where is the recipe from? ",
                    "The recipe source can't be blank,",
                    "yes")
 
+
+
 # Get serving sizes and scale factor
 scale_factor = get_sf()
-
+print()
 # Get amounts, units and ingredients from user...
 full_recipe = get_all_ingredients()
 
@@ -240,6 +287,11 @@ for recipe_line in full_recipe:
             amount = amount * scale_factor
         except NameError:
             amount = get_amount[0]
+            modernised_recipe.append(recipe_line)
+            continue
+
+        except SyntaxError:
+            problem = "yes"
             modernised_recipe.append(recipe_line)
             continue
 
@@ -280,10 +332,20 @@ for recipe_line in full_recipe:
         modernised_recipe.append("{} {}".format(amount, unit_ingredient))
         continue
 
-    modernised_recipe.append("{} {} {}".format(amount, unit, ingredient))
+
 
 # Put updated ingredient in list
 
 # Output ingredient list
+print()
+print("******* {} ******".format(recipe_name))
+print("Source: {}".format(source))
+print()
+print("****Ingredients (scaled by a factor of {}) ****".format(scale_factor))
+print()
+
+
+
+
 for item in modernised_recipe:
     print(item)
